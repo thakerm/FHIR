@@ -22,6 +22,7 @@
         <h4>Medications</h4>
         <div id="meds">Loading...</div>
         <script type="text/javascript">
+            const client = FHIR.client("https://fhir.epic.com/interconnect-fhir-oauth/");
             FHIR.oauth2.ready().then(function(client) {
                 
                 // Render the current patient (or any error)

@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <title>Example SMART App</title>
         <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
+        <script src="jquery-3.6.3.min.js"></script>
         <style>
             #patient, #meds {
                 font-family: Monaco, monospace;
@@ -22,7 +23,7 @@
         <h4>Medications</h4>
         <div id="meds">Loading...</div>
         <script type="text/javascript">
-            const client = FHIR.client("https://fhir.epic.com/interconnect-fhir-oauth/");
+            //const client = FHIR.client("https://fhir.epic.com/interconnect-fhir-oauth/");
             FHIR.oauth2.ready().then(function(client) {
                 
                 // Render the current patient (or any error)

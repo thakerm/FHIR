@@ -1,63 +1,51 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>My SMART on FHIR App</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            text-align: left;
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <h1>My SMART on FHIR App</h1>
-    <div id="psa-data"></div>
-    
+  <head>
+    <title>SMART on FHIR App</title>
     <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.min.js"></script>
     <script>
-        FHIR.oauth2.ready().then(client => {
-            client.patient.read().then(patient => {
-                const patientId = patient.id;
-                const psaObservations = client.request(`Observation?patient=${patientId}&code=PSA`).then(bundle => bundle.entry.map(entry => entry.resource));
-
-                Promise.all([psaObservations]).then(([psaObservations]) => {
-                    if (psaObservations.length === 0) {
-                        document.getElementById('psa-data').innerHTML = '<p>No PSA data available.</p>';
-                        return;
-                    }
-                    const psaData = `
-                        <h2>PSA Data</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Value</th>
-                                    <th>Unit</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${psaObservations.map(observation => `
-                                    <tr>
-                                        <td>${observation.effectiveDateTime}</td>
-                                        <td>${observation.valueQuantity.value}</td>
-                                        <td>${observation.valueQuantity.unit}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    `;
-                    document.getElementById('psa-data').innerHTML = psaData;
-                });
+      FHIR.oauth2.ready().then(client => {
+        console.log('Patient:', client.patient);
+        
+        function locatePSA() {
+          const mrn = document.getElementById('mrn').value;
+          client.request(`Observation?subject.identifier=${mrn}&code=PSA`).then(response => {
+            console.log('Observation:', response);
+            const table = document.getElementById('psa-table');
+            table.innerHTML = `
+              <tr>
+                <th>Date</th>
+                <th>Value</th>
+                <th>Unit</th>
+              </tr>
+            `;
+            response.entry.forEach(entry => {
+              const observation = entry.resource;
+              const date = observation.effectiveDateTime;
+              const value = observation.valueQuantity.value;
+              const unit = observation.valueQuantity.unit;
+              const row = `
+                <tr>
+                  <td>${date}</td>
+                  <td>${value}</td>
+                  <td>${unit}</td>
+                </tr>
+              `;
+              table.innerHTML += row;
             });
-        });
+          });
+        }
+      });
     </script>
-</body>
+  </head>
+  <body>
+    <h1>SMART on FHIR App</h1>
+    <form>
+      <label for="mrn">Medical Record Number:</label>
+      <input type="text" id="mrn" name="mrn">
+      <button type="button" onclick="locatePSA()">Locate PSA Data</button>
+    </form>
+    <hr>
+    <table id="psa-table"></table>
+  </body>
 </html>

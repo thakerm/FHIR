@@ -20,8 +20,8 @@
 <body>
     <h1>My SMART on FHIR App</h1>
     <div id="psa-data"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/fhirclient/dist/fhir-client.min.js"></script>
+    
+    <script>src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.min.js"</script>
     <script>
         FHIR.oauth2.ready().then(client => {
             client.patient.read().then(patient => {

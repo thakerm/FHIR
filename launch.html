@@ -2,12 +2,15 @@
 <html>
 <head>
     <title>My SMART on FHIR App</title>
-</head>
+  
+    <script>src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.min.js"</script>
+    
+  </head>
 <body>
     <h1>Welcome to my SMART on FHIR App</h1>
     <button onclick="launch()">Launch App</button>
 
-    <script src="https://cdn.jsdelivr.net/npm/fhirclient/dist/fhir-client.min.js"></script>
+    
     <script>
         function launch() {
             FHIR.oauth2.authorize({

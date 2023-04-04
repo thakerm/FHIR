@@ -4,21 +4,19 @@
     <title>My SMART on FHIR App</title>
 </head>
 <body>
-    <h1>My SMART on FHIR App</h1>
-    <div id="patient-data"></div>
+    <h1>Welcome to my SMART on FHIR App</h1>
+    <button onclick="launch()">Launch App</button>
 
     <script src="https://cdn.jsdelivr.net/npm/fhirclient/dist/fhir-client.min.js"></script>
     <script>
-        FHIR.oauth2.ready().then(client => {
-            client.patient.read().then(patient => {
-                const patientData = `
-                    <p>Name: ${patient.name[0].given.join(' ')} ${patient.name[0].family}</p>
-                    <p>Gender: ${patient.gender}</p>
-                    <p>Birthdate: ${patient.birthDate}</p>
-                `;
-                document.getElementById('patient-data').innerHTML = patientData;
+        function launch() {
+            FHIR.oauth2.authorize({
+                client_id: '0ca57d5c-b00d-4714-a1f1-0a91569275ca',
+                scope: 'launch',
+                redirect_uri: 'http://localhost:8000/launch.html',
+                iss: 'https://open-ic.epic.com/Argonaut/api/FHIR/Argonaut'
             });
-        });
+        }
     </script>
 </body>
 </html>

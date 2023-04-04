@@ -1,36 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>SMART on FHIR Starter App</title>    
-  </head>
-  Loading...
-  <body>
-    
-    <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<html>
+<head>
+    <title>My SMART on FHIR App</title>
+</head>
+<body>
+    <h1>My SMART on FHIR App</h1>
+    <div id="patient-data"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fhirclient/dist/fhir-client.min.js"></script>
     <script>
-      FHIR.oauth2.authorize({
-
-        // The client_id that you should have obtained after registering a client at
-        // the EHR.
-        clientId: "0ca57d5c-b00d-4714-a1f1-0a91569275ca",
-
-        // The scopes that you request from the EHR. In this case we want to:
-        // launch            - Get the launch context
-        // openid & fhirUser - Get the current user
-        // patient/*.read    - Read patient data
-        scope: "launch/launch openid fhirUser patient/*.read",
-
-        // Typically, if your redirectUri points to the root of the current directory
-        // (where the launchUri is), you can omit this option because the default value is
-        // ".". However, some servers do not support directory indexes so "." and "./"
-        // will not automatically map to the "index.html" file in that directory.
-        redirectUri: "index.html",
-
-        fhirServiceUrl: "https://fhir.epic.com/interconnect-fhir-oauth/"
-      });
-  </script>
-  </body>
+        FHIR.oauth2.ready().then(client => {
+            client.patient.read().then(patient => {
+                const patientData = `
+                    <p>Name: ${patient.name[0].given.join(' ')} ${patient.name[0].family}</p>
+                    <p>Gender: ${patient.gender}</p>
+                    <p>Birthdate: ${patient.birthDate}</p>
+                `;
+                document.getElementById('patient-data').innerHTML = patientData;
+            });
+        });
+    </script>
+</body>
 </html>

@@ -1,43 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Example SMART App</title>
-        <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<html>
+<head>
+    <title>My SMART on FHIR App</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>My SMART on FHIR App</h1>
+    <div id="psa-data"></div>
 
-        <style>
-            #patient, #meds {
-                font-family: Monaco, monospace;
-                white-space: pre;
-                font-size: 13px;
-                height: 30vh;
-                overflow: scroll;
-                border: 1px solid #CCC;
-            }
-        </style>
-    </head>
-    <body>
-        <h4>Current Patient</h4>
-        <div id="patient">Loading...</div>
-        <br/>
-        <h4>Medications</h4>
-        <div id="meds">Loading...</div>
-        <script type="text/javascript">
-            //const client = FHIR.client("https://fhir.epic.com/interconnect-fhir-oauth/");
-            FHIR.oauth2.ready().then(function(client) {
-                
-                // Render the current patient (or any error)
-                client.patient.read().then(
-                    function(pt) {
-                        document.getElementById("patient").innerText = JSON.stringify(pt, null, 4);
-                    },
-                    function(error) {
-                        document.getElementById("patient").innerText = error.stack;
+    <script src="https://cdn.jsdelivr.net/npm/fhirclient/dist/fhir-client.min.js"></script>
+    <script>
+        FHIR.oauth2.ready().then(client => {
+            client.patient.read().then(patient => {
+                const patientId = patient.id;
+                const psaObservations = client.request(`Observation?patient=${patientId}&code=PSA`).then(bundle => bundle.entry.map(entry => entry.resource));
+
+                Promise.all([psaObservations]).then(([psaObservations]) => {
+                    if (psaObservations.length === 0) {
+                        document.getElementById('psa-data').innerHTML = '<p>No PSA data available.</p>';
+                        return;
                     }
-                );
-                
-            }).catch(console.error);
-        </script>
-    </body>
+                    const psaData = `
+                        <h2>PSA Data</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Value</th>
+                                    <th>Unit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${psaObservations.map(observation => `
+                                    <tr>
+                                        <td>${observation.effectiveDateTime}</td>
+                                        <td>${observation.valueQuantity.value}</td>
+                                        <td>${observation.valueQuantity.unit}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    document.getElementById('psa-data').innerHTML = psaData;
+                });
+            });
+        });
+    </script>
+</body>
 </html>

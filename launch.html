@@ -15,8 +15,7 @@
         function launch() {
             FHIR.oauth2.authorize({
                 client_id: '0ca57d5c-b00d-4714-a1f1-0a91569275ca',
-                scope: 'launch',
-                redirect_uri: 'thakerm.github.io/FHIR/index.html',
+                scope: 'launch/patient',
                 iss: 'https://fhir.epic.com/interconnect-fhir-oauth/'
             });
         }

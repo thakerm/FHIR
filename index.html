@@ -7,7 +7,7 @@
       FHIR.oauth2.ready().then(client => {
         console.log('Patient:', client.patient);
         
-        function locatePSA() {
+      
           const mrn = document.getElementById('mrn').value;
           client.request(`Observation?subject.identifier=${mrn}&code=PSA`).then(response => {
             console.log('Observation:', response);
@@ -34,7 +34,7 @@
               table.innerHTML += row;
             });
           });
-        }
+        
       });
     </script>
   </head>

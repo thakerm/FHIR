@@ -1,47 +1,65 @@
-<!DOCTYPE html>
+<!-- index.html -->
+<script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+
+        
+//FHIR smart app that uses Observation?patient.identifier={}&code=http://loinc.org|83112-3
+//to get the patient's PSA level
+//and then uses the patient's PSA level to determine if the patient has prostate cancer
+
+//smart on fhir gets patient name and id and displays on page
+
+
+FHIR.oauth2.ready().then(smart => {
+       patient = smart.patient;
+       pt = patient.read();
+        console.log(pt);
+
+        $.when(pt).done(function(patient)
+        {
+        var fname = '';
+          var lname = '';
+          gender = patient.gender
+            console.log(gender)
+            fname = patient.name[0].given[0];
+           console.log(fname);
+          
+           obv = smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function(obv)
+           {
+                table = document.getElementById("PSA");
+                console.log(obv);
+               len = obv.entry.length;
+               console.log("len", len);
+              
+               for(i=0;i<len;i++)
+               {
+                    //create new 
+                    table += "<tr><td>"+obv.entry[i].resource.valueQuantity.value+"</td></tr>";
+                    //table += "<tr>"+"Hi"+"</tr>";
+
+               }
+               //append table to html
+                $("#PSA").append(table);
+           });
+           
+        });
+
+    })
+    .catch(console.error);
+
+</script>
+
 <html>
-  <head>
+
+<head>
     <title>SMART on FHIR App</title>
-    <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.min.js"></script>
-    <script>
-      FHIR.oauth2.ready().then(client => {
-        console.log('Patient:', client.patient);
-        
-      
-          const mrn = document.getElementById('mrn').value;
-          client.request(`Observation?subject.identifier=${mrn}&code=PSA`).then(response => {
-            console.log('Observation:', response);
-            const table = document.getElementById('psa-table');
-            table.innerHTML = `
-              <tr>
-                <th>Date</th>
-                <th>Value</th>
-                <th>Unit</th>
-              </tr>
-            `;
-            response.entry.forEach(entry => {
-              const observation = entry.resource;
-              const date = observation.effectiveDateTime;
-              const value = observation.valueQuantity.value;
-              const unit = observation.valueQuantity.unit;
-              const row = `
-                <tr>
-                  <td>${date}</td>
-                  <td>${value}</td>
-                  <td>${unit}</td>
-                </tr>
-              `;
-              table.innerHTML += row;
-            });
-          });
-        
-      });
-    </script>
-  </head>
-  <body>
-    <h1>SMART on FHIR App</h1>
-    
-    <hr>
-    <table id="psa-table"></table>
-  </body>
+    </head>
+
+    <body>
+            <table id="PSA">
+
+            </table>
+    </body>
+
 </html>

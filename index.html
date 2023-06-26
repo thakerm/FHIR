@@ -11,6 +11,24 @@
         console.log("Pt", pt);
 
 
+        obv = smart.patients.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
+
+            table = document.getElementById("PSA");
+            console.log("obv", obv);
+            len = obv.entry.length;
+            console.log("len", len);
+
+            for (i = 0; i < len; i++) {
+                //create new 
+                table += "<tr><td>" + obv.entry[i].resource.valueQuantity.value + "</td></tr>";
+                //table += "<tr>"+"Hi"+"</tr>";
+
+            }
+            //append table to html
+            $("#PSA").append(table);
+        }).catch(console.error);
+
+
         $.when(patient).done(function (patients) {
             var fname = '';
             var lname = '';
@@ -24,22 +42,6 @@
             document.getElementById("age").innerHTML = age;
 
 
-            obv = smart.patients.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
-
-                table = document.getElementById("PSA");
-                console.log("obv", obv);
-                len = obv.entry.length;
-                console.log("len", len);
-
-                for (i = 0; i < len; i++) {
-                    //create new 
-                    table += "<tr><td>" + obv.entry[i].resource.valueQuantity.value + "</td></tr>";
-                    //table += "<tr>"+"Hi"+"</tr>";
-
-                }
-                //append table to html
-                $("#PSA").append(table);
-            });
 
         }).catch(console.error);
 

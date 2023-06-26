@@ -3,7 +3,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script>
 
-    FHIR.oauth2.ready().then(smart => {
+    FHIR.oauth2.ready().then(smart => { //starting in version 2.5 must use then or catch to get the smart object
         console.log("Smart", smart);
         patient = smart.patient;
         console.log("Patient", patient);
@@ -24,21 +24,6 @@
             document.getElementById("age").innerHTML = age;
 
 
-            smart.patient.api.search({
-            type: 'Observation',
-            query: {
-                code: 'http://loinc.org|2857-1'
-            }
-        }).then(function (response) {
-            // Handle the response containing the Observation data
-            table = document.getElementById("PSA");
-            var observations = response.data.entry;
-            table += "<tr><td>" + observations + "</td></tr>";
-            // Process the observations as needed
-        }).catch(function (error) {
-            // Handle any errors that occur during the request
-        });
-
             obv = smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
 
                 table = document.getElementById("PSA");
@@ -56,7 +41,7 @@
                 $("#PSA").append(table);
             });
 
-        });
+        }).catch(console.error);
 
     })
         .catch(console.error);

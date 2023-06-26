@@ -28,8 +28,31 @@
             $("#PSA").append(table);
         }).catch(console.error);
 
+        //request all available labratory data for selected patient
 
-        $.when(patient).done(function (patients) {
+        smart.patient.request({
+            resourceType: 'Observation',
+            params: {
+                category: 'laboratory'
+            }
+        }).then(function (response) {
+            var observations = response.entry;
+            observations.forEach(function (entry) {
+                var observation = entry.resource;
+                // Extract the relevant information from the observation
+                var value = observation.valueQuantity.value;
+                var unit = observation.valueQuantity.unit;
+                var date = observation.effectiveDateTime;
+
+                // Append the data to the #labData element
+                $("#labData").append("<tr><td>" + value + "</td><td>" + unit + "</td><td>" + date + "</td></tr>");
+            });
+        }).catch(function (error) {
+            console.error('Error:', error);
+        });
+
+
+        /* $.when(patient).done(function (patients) {
             var fname = '';
             var lname = '';
             patientID = smart.patient.id;
@@ -43,7 +66,7 @@
 
 
 
-        }).catch(console.error);
+        }).catch(console.error); */
 
     })
         .catch(console.error);
@@ -63,6 +86,7 @@
     <table id="PSA">
 
     </table>
+    <table id="labdata"></table>
 </body>
 
 </html>

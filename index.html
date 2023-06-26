@@ -3,7 +3,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script>
 
-    FHIR.oauth2.ready().then(smart => { //starting in version 2.5 must use then or catch to get the smart object
+     //starting in version 2.5 must use then or catch to get the smart object
         /* console.log("Smart", smart);
         
         console.log("Patient", patient);
@@ -29,8 +29,9 @@
         }).catch(console.error); */
 
         //request all available labratory data for selected patient
-        patient = smart.patient;
-        console.log("Patient", patient);
+        FHIR.oauth2.ready().then(smart => {
+        obv = smart.observation;
+        console.log("obv", obv);
     smart.patient.request({
             resourceType: 'Observation',
             params: {

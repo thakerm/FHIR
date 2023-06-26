@@ -11,7 +11,7 @@
         console.log("Pt", pt); */
 
 
-        smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
+       /*  smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
             console.log("I am in");
             table = document.getElementById("PSA");
             console.log("obv", obv);
@@ -26,11 +26,11 @@
             }
             //append table to html
             $("#PSA").append(table);
-        }).catch(console.error);
+        }).catch(console.error); */
 
         //request all available labratory data for selected patient
 
-     /*    smart.patient.request({
+    smart.patient.request({
             resourceType: 'Observation',
             params: {
                 category: 'laboratory'
@@ -49,7 +49,7 @@
             });
         }).catch(function (error) {
             console.error('Error:', error);
-        }); */
+        }); 
 
 
         /* $.when(patient).done(function (patients) {

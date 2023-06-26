@@ -3,44 +3,43 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script>
 
-FHIR.oauth2.ready().then(smart => {
-       patient = smart.patient;
-       pt = patient.read();
+    FHIR.oauth2.ready().then(smart => {
+        patient = smart.patient;
+        pt = patient.read();
         console.log(pt);
 
-        $.when(pt).done(function(patient)
-        {
-        var fname = '';
-          var lname = '';
-          gender = patient.gender
+        $.when(pt).done(function (patient) {
+            var fname = '';
+            var lname = '';
+            gender = patient.gender
+            age = patient.age;
             console.log(gender)
-            document.getElementById("name").innerHTML = patient.name[0].given[0] + " " + patient.name[0].family;
-            document.getElementById("gender").innerHTML = gender
-           //console.log(fname);
-          
-           obv = smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function(obv)
-           {
-                
+            document.getElementById("name").innerHTML = "Welcome " + patient.name[0].given[0] + " " + patient.name[0].family;
+            document.getElementById("gender").innerHTML = gender;
+            document.getElementById("age").innerHTML = age;
+            //console.log(fname);
+
+            obv = smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
+
                 table = document.getElementById("PSA");
-                console.log("obv",obv);
-               len = obv.entry.length;
-               console.log("len", len);
-              
-               for(i=0;i<len;i++)
-               {
+                console.log("obv", obv);
+                len = obv.entry.length;
+                console.log("len", len);
+
+                for (i = 0; i < len; i++) {
                     //create new 
-                    table += "<tr><td>"+obv.entry[i].resource.valueQuantity.value+"</td></tr>";
+                    table += "<tr><td>" + obv.entry[i].resource.valueQuantity.value + "</td></tr>";
                     //table += "<tr>"+"Hi"+"</tr>";
 
-               }
-               //append table to html
+                }
+                //append table to html
                 $("#PSA").append(table);
-           });
-           
+            });
+
         });
 
     })
-    .catch(console.error);
+        .catch(console.error);
 
 </script>
 
@@ -48,14 +47,15 @@ FHIR.oauth2.ready().then(smart => {
 
 <head>
     <title>SMART on FHIR App</title>
-    </head>
+</head>
 
-    <body>
-            <h1 id="name"></h1>
-            <p id="gender"></p>
-            <table id="PSA">
+<body>
+    <h1 id="name"></h1>
+    <p id="gender"></p>
+    <p id="age"></p>
+    <table id="PSA">
 
-            </table>
-    </body>
+    </table>
+</body>
 
 </html>

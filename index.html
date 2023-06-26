@@ -4,11 +4,11 @@
 <script>
 
     FHIR.oauth2.ready().then(smart => { //starting in version 2.5 must use then or catch to get the smart object
-        console.log("Smart", smart);
+        /* console.log("Smart", smart);
         patient = smart.patient;
         console.log("Patient", patient);
         pt = patient.read();
-        console.log("Pt", pt);
+        console.log("Pt", pt); */
 
 
         smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
@@ -30,7 +30,7 @@
 
         //request all available labratory data for selected patient
 
-        smart.patient.request({
+     /*    smart.patient.request({
             resourceType: 'Observation',
             params: {
                 category: 'laboratory'
@@ -49,7 +49,7 @@
             });
         }).catch(function (error) {
             console.error('Error:', error);
-        });
+        }); */
 
 
         /* $.when(patient).done(function (patients) {

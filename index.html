@@ -4,25 +4,25 @@
 <script>
 
     FHIR.oauth2.ready().then(smart => {
-        console.log("Smart",smart);
+        console.log("Smart", smart);
         patient = smart.patient;
         pt = patient.read();
-        console.log("Pt",pt);
+        console.log("Pt", pt);
 
         smart.patient.api.search({
-  type: 'Observation',
-  query: {
-    code: 'http://loinc.org|2857-1'
-  }
-}).then(function(response) {
-  // Handle the response containing the Observation data
-  table = document.getElementById("PSA");
-  var observations = response.data.entry;
-  table += "<tr><td>" + obv.entry[i].resource.valueQuantity.value + "</td></tr>";
-  // Process the observations as needed
-}).catch(function(error) {
-  // Handle any errors that occur during the request
-});
+            type: 'Observation',
+            query: {
+                code: 'http://loinc.org|2857-1'
+            }
+        }).then(function (response) {
+            // Handle the response containing the Observation data
+            table = document.getElementById("PSA");
+            var observations = response.data.entry;
+            table += "<tr><td>" + observations + "</td></tr>";
+            // Process the observations as needed
+        }).catch(function (error) {
+            // Handle any errors that occur during the request
+        });
 
         $.when(pt).done(function (patient) {
             var fname = '';
@@ -36,7 +36,7 @@
             document.getElementById("gender").innerHTML = gender;
             document.getElementById("age").innerHTML = age;
 
-           
+
 
             obv = smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
 

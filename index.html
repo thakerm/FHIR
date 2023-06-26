@@ -4,13 +4,16 @@
 <script>
 
     FHIR.oauth2.ready().then(smart => {
+        console.log("Smart",smart);
         patient = smart.patient;
         pt = patient.read();
-        console.log(pt);
+        console.log("Pt",pt);
 
         $.when(pt).done(function (patient) {
             var fname = '';
             var lname = '';
+            patientID = smart.patient.id;
+            console.log("Patient ID", patientID);
             gender = patient.gender
             age = patient.birthDate;
             console.log(gender)
@@ -18,11 +21,10 @@
             document.getElementById("gender").innerHTML = gender;
             document.getElementById("age").innerHTML = age;
 
-            smart.api.search({
+            smart.patient.api.search({
   type: 'Observation',
   query: {
-    code: 'http://loinc.org|2857-1',
-    patient: 'Patient/{patientId}' // Replace {patientId} with the actual patient ID
+    code: 'http://loinc.org|2857-1'
   }
 }).then(function(response) {
   // Handle the response containing the Observation data

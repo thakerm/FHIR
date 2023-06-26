@@ -30,6 +30,7 @@
 
         //request all available labratory data for selected patient
         patient = smart.patient;
+        console.log("Patient", patient);
     smart.patient.request({
             resourceType: 'Observation',
             params: {

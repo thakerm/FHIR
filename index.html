@@ -6,10 +6,25 @@
     FHIR.oauth2.ready().then(smart => {
         console.log("Smart", smart);
         patient = smart.patient;
+        console.log("Patient", patient);
         pt = patient.read();
         console.log("Pt", pt);
 
-        smart.patient.api.search({
+
+        $.when(pt).done(function (patients) {
+            var fname = '';
+            var lname = '';
+            patientID = smart.patient.id;
+            console.log("Patient ID", patientID);
+            gender = patients.gender
+            age = patients.birthDate;
+            console.log(gender)
+            document.getElementById("name").innerHTML = "Welcome " + patients.name[0].given[0] + " " + patients.name[0].family;
+            document.getElementById("gender").innerHTML = gender;
+            document.getElementById("age").innerHTML = age;
+
+
+            smart.patient.api.search({
             type: 'Observation',
             query: {
                 code: 'http://loinc.org|2857-1'
@@ -23,20 +38,6 @@
         }).catch(function (error) {
             // Handle any errors that occur during the request
         });
-
-        $.when(pt).done(function (patient) {
-            var fname = '';
-            var lname = '';
-            patientID = smart.patient.id;
-            console.log("Patient ID", patientID);
-            gender = patient.gender
-            age = patient.birthDate;
-            console.log(gender)
-            document.getElementById("name").innerHTML = "Welcome " + patient.name[0].given[0] + " " + patient.name[0].family;
-            document.getElementById("gender").innerHTML = gender;
-            document.getElementById("age").innerHTML = age;
-
-
 
             obv = smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
 

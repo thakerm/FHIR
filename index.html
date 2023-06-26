@@ -24,7 +24,7 @@
             document.getElementById("age").innerHTML = age;
 
 
-            obv = smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
+            obv = smart.patients.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
 
                 table = document.getElementById("PSA");
                 console.log("obv", obv);

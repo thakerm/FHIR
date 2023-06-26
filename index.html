@@ -12,12 +12,25 @@
             var fname = '';
             var lname = '';
             gender = patient.gender
-            age = patient.age;
+            age = patient.birthDate;
             console.log(gender)
             document.getElementById("name").innerHTML = "Welcome " + patient.name[0].given[0] + " " + patient.name[0].family;
             document.getElementById("gender").innerHTML = gender;
             document.getElementById("age").innerHTML = age;
-            //console.log(fname);
+
+            smart.api.search({
+  type: 'Observation',
+  query: {
+    code: 'http://loinc.org|2857-1',
+    patient: 'Patient/{patientId}' // Replace {patientId} with the actual patient ID
+  }
+}).then(function(response) {
+  // Handle the response containing the Observation data
+  var observations = response.data.entry;
+  // Process the observations as needed
+}).catch(function(error) {
+  // Handle any errors that occur during the request
+});
 
             obv = smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
 

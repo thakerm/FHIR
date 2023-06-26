@@ -3,14 +3,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script>
 
-        
-//FHIR smart app that uses Observation?patient.identifier={}&code=http://loinc.org|83112-3
-//to get the patient's PSA level
-//and then uses the patient's PSA level to determine if the patient has prostate cancer
-
-//smart on fhir gets patient name and id and displays on page
-
-
 FHIR.oauth2.ready().then(smart => {
        patient = smart.patient;
        pt = patient.read();
@@ -22,8 +14,9 @@ FHIR.oauth2.ready().then(smart => {
           var lname = '';
           gender = patient.gender
             console.log(gender)
-            fname = patient.name[0].given[0];
-           console.log(fname);
+            document.getElementById("name").innerHTML = patient.name[0].given[0] + " " + patient.name[0].family;
+            document.getElementById("gender").innerHTML = gender
+           //console.log(fname);
           
            obv = smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function(obv)
            {
@@ -58,6 +51,8 @@ FHIR.oauth2.ready().then(smart => {
     </head>
 
     <body>
+            <h1 id="name"></h1>
+            <p id="gender"></p>
             <table id="PSA">
 
             </table>

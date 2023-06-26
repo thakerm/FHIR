@@ -5,7 +5,7 @@
 
     FHIR.oauth2.ready().then(smart => { //starting in version 2.5 must use then or catch to get the smart object
         /* console.log("Smart", smart);
-        patient = smart.patient;
+        
         console.log("Patient", patient);
         pt = patient.read();
         console.log("Pt", pt); */
@@ -29,7 +29,7 @@
         }).catch(console.error); */
 
         //request all available labratory data for selected patient
-
+        patient = smart.patient;
     smart.patient.request({
             resourceType: 'Observation',
             params: {

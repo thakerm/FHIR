@@ -30,7 +30,7 @@
 
         //request all available labratory data for selected patient
         FHIR.oauth2.ready().then(smart => {
-        obv = smart.observation;
+        //obv = smart.observation;
         console.log("obv", obv);
     smart.patient.request({
             resourceType: 'Observation',

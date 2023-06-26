@@ -27,8 +27,9 @@ FHIR.oauth2.ready().then(smart => {
           
            obv = smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function(obv)
            {
+                
                 table = document.getElementById("PSA");
-                console.log(obv);
+                console.log("obv",obv);
                len = obv.entry.length;
                console.log("len", len);
               

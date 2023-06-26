@@ -11,7 +11,7 @@
         console.log("Pt", pt);
 
 
-        obv = smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
+        smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (obv) {
             console.log("I am in");
             table = document.getElementById("PSA");
             console.log("obv", obv);

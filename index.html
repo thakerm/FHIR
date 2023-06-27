@@ -32,7 +32,7 @@
         FHIR.oauth2.ready().then(smart => {
         //obv = smart.observation;
         //console.log("obv", obv);
-    smart.patient.request("Observation?code=http://loinc.org|2857-1"}).then(function (response) {
+    smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (response) {
             var observations = response.entry;
             observations.forEach(function (entry) {
                 var observation = entry.resource;

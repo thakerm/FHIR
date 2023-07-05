@@ -32,7 +32,7 @@
     //request all available labratory data for selected patient
     FHIR.oauth2.ready().then(smart => {
         console.log(smart);
-        smart.patient.request("Observation").then(function (response) {
+        smart.patient.request("Observation?code=http://loinc.org|2857-1").then(function (response) {
             console.log(response);
             var observations = response.entry;
 
